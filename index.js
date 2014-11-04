@@ -29,70 +29,48 @@ function getHTML(){
     		console.log('Error when contacting exeter.edu')
     		console.log(error)
   		}
-  		
-  		getMealData(body)
+
+  		parseMealData(body)
 	})
 
 }
 
-function getMealName(day, hour, mealIndex)
-{
-	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-	var meals = ['Breakfast', 'Lunch', 'Dinner']
-	var meal;
-
-	if(hour > 18 || (hour < 8 || (hour < 12 && day==0))) meal = 0;
-	else if(hour > 8 && hour < 12) meal = 1;
-	else meal = 2;
-
-	day += Math.floor((meal + mealIndex)/3);
-
-	return meals[(meal + mealIndex) % 3] + days[day];
-}
-
-function getMealData(body){
+function parseMealData(body){
 	$ = cheerio.load(body)
 
+	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+	var meals = ['Breakfast', 'Lunch', 'Dinner']
+	var dhall = ['Wetherell', 'Elm Street']
+
 	var d = new Date();
-	var foods = [];
+	var temp = []
+	var foods = {};
 
-	$('#lbl' + getMealName(d.getDay(), d.getHours(), 0) + ' p').each(
-		function(){
-			var text = $(this).text().trim()
-			if(text != ""){
-				foods.push(text)
-				console.log(text)
-			}
+	var currentDhall;
+
+	for (var i = 0; i < days.length; i++) {
+		foods[days[i]] = {};
+
+		for (var k = 0; k < meals.length; k++) {
+			foods[days[i]][meals[k]]={'Wetherell':null, 'Elm Street':null}
+			$('#lbl' + meals[k] + days[i] + ' p').each(
+				function(){
+					var text = $(this).text().trim()
+					if(text == ""){
+						return;
+					}
+					if(dhall.indexOf(text)!=-1){
+						currentDhall = text;
+					}
+
+					foods[days[i]][meals[k]][currentDhall] += text;
+
+				}
+			);
+
 		}
-	);
-
-	// var middleString = "Elm Street";
-
-	// if(foods.length > 0){
-	// 	return [foods.slice(1, foods.indexOf(middleString)), foods.slice(foods.indexOf("Elm Street")+1)];
-	// }
-
-
-
- 	// var d = new Date();
-	// var foods = [];
-
-	// $('#lbl' + getMealName(d.getDay(), d.getHours(), mealIndex) + ' p').each(
-	// 	function() 
-	// 	{
-	// 		var text = $(this).text().trim()
-	// 		if(text != ""){
-	// 			foods.push(text)
-	// 		}
-	// 	});
-
-	// //Wetherell is 0th element, Elm is 1st element
-	// if(foods.length > 0){
-	// 	return [foods.slice(1, foods.indexOf("Elm Street")), foods.slice(foods.indexOf("Elm Street") + 1)];
-	// } else {
-	// 	return false
-	// }
+	}
+	console.log(foods);
 
 }
-getHTML()
-// getMealData(getHTML(), 0);		//Call on server start to streamline dev process
+getHTML() //Calling on server start to streamline dev process
