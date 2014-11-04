@@ -4,7 +4,9 @@ DineExeter
 * Please abide by best practices of whichever language you are working in.
 * https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml about sums it up for Javascript, just keep it clean and commented please.
 * Clean commits are certainly prefered.  Make sure to comment all commits thoroughly.
+
 ### Dining Hall Data
+
 #### Data scraping
 * Scraper.js was the in browser implementation of the scraper using JQuery.
 * This has been moved to index.js and is now being done with Cheerio.
