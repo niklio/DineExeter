@@ -54,8 +54,7 @@ function parseHTML(callback){
 	var url = 'http://exeter.edu/student_life/14202_15947.aspx';
 	request({ uri: url }, function (error, response, body) {  
   		if (error || response.statusCode !== 200) {
-    		console.log('Error when contacting exeter.edu')
-    		console.log(error)
+    		console.log('Error when contacting exeter.edu' + error)
   		}
 
   		foods = parseMealData(body)
