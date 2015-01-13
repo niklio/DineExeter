@@ -8,11 +8,11 @@ exports.postVote = function(req, res) {
 	var vote = new Vote();
 
 	// Set all attributes that come from POST request
-	vote.userID = req.connection.remoteAddress;
+	vote.userID = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	vote.foodID = req.body.food_id;
 	vote.upvote = req.body.upvote;
 
-	Vote.find({ userID : vote.userID, foodID : vote.foodID }, function (err, docs) {
+	Vote.find({ userID : vote.userID, foodID : vote.foodID }, function (err) {
 		res.send({ message: 'User has already voted on this item' });
 		return;
 	});

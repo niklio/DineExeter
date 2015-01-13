@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
 
 // Define our poem schema
-var FoodSchema   = new mongoose.Schema({
+var FoodSchema = new mongoose.Schema({
 	name: String,
-	datemeal: String
+	mealday: String,
+	// 0 - weth, 1 - elm
+	iselm: Boolean
 });
 
 // Export the Mongoose model

@@ -1,28 +1,28 @@
-var cheerio = require('cheerio'),
-	request = require('request');
+var mongoose = require('mongoose'),
+	cheerio = require('cheerio'),
+	request = require('request'),
 
-module.exports = function() {
-	db.open(function(err, db) {
-		if (err) {
-			console.log("Error connecting to your mom");
-			return;
-		}
+	Food = mongoose.model('Food');
 
-        db.collection(collection_name, {strict:true}, function(err, collection) {
-        	if (err) {
-        		console.log("The " + collection_name + "collection doesn't exist.  Populating it with available data");
-        		parseHTML(function(foods){
-                	db.collection(collection_name, function(err, collection) {
-	                	collection.insert(foods, {safe:true}, function(err, result) {});
-	        		})
-                });
-                return;
-        	}
+exports.updateDB = function() {
+	parseHTML(function(foods){
+		for (food in foods) {
 
-        	console("Updating " + collection_name + "with available data");
-            parseHTML(function() {});
-        });
-	});
+			var food = new Food(food);
+
+			Food.find(food, function(oldfood){
+				oldfood.mealday = food.mealday
+			})
+
+			food.save(function (err) {
+				if (err) {
+					console.log(err)
+				}
+
+				console.log('Food added to the database')
+			});
+    	}
+    })
 }
 
 function parseHTML(callback){
@@ -43,7 +43,7 @@ function parseMealData(body){
 
 	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 	var meals = ['Breakfast', 'Lunch', 'Dinner']
-	var dhall = ['','Wetherell', 'Elm Street']
+	var dhall = ['Wetherell', 'Elm Street', '']
 
 	var d = new Date();
 	var temp = []
@@ -51,18 +51,18 @@ function parseMealData(body){
 
 	var currentDhall = 'Elm Street';
 
-	for (var i = 0; i < days.length; i++) {
-		foods[days[i]] = {};
-		for (var k = 0; k < meals.length; k++) {
-			foods[days[i]][meals[k]]={'Wetherell':[], 'Elm Street':[]}
-			$('#lbl' + meals[k] + days[i] + ' p').each(function(){
+	for (day in days) {
+		for (meal in meals) {
+			$('#lbl' + meal + day + ' p').each(function(){
 				var text = $(this).text().trim()
-				if(dhall.indexOf(text) > 0){
+				if(dhall.indexOf(text) < 2){
 					currentDhall = text;
 				} else if(dhall.indexOf(text) == 0){
 					currentDhall = 'Elm Street'
 				} else {
-					foods[days[i]][meals[k]][currentDhall].push(text);
+					foods.push(
+						{ name: text, mealday: meal + day, iselm: dhall.indexOf(currentDhall) }
+					);
 				}
 			});
 		}
