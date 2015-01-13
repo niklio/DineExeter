@@ -1,6 +1,5 @@
 var mongoose = require('mongoose'),
-	Poem = mongoose.model('Poem')
-
+	Poem = mongoose.model('Poem');
 
 
 module.exports = function(app, passport) {

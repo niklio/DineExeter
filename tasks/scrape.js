@@ -1,7 +1,31 @@
 var cheerio = require('cheerio'),
 	request = require('request');
 
-exports.parseHTML = function(callback){
+module.exports = function() {
+	db.open(function(err, db) {
+		if (err) {
+			console.log("Error connecting to your mom");
+			return;
+		}
+
+        db.collection(collection_name, {strict:true}, function(err, collection) {
+        	if (err) {
+        		console.log("The " + collection_name + "collection doesn't exist.  Populating it with available data");
+        		parseHTML(function(foods){
+                	db.collection(collection_name, function(err, collection) {
+	                	collection.insert(foods, {safe:true}, function(err, result) {});
+	        		})
+                });
+                return;
+        	}
+
+        	console("Updating " + collection_name + "with available data");
+            parseHTML(function() {});
+        });
+	});
+}
+
+function parseHTML(callback){
 	var url = 'http://exeter.edu/student_life/14202_15947.aspx';
 	request({ uri: url }, function (error, response, body) {  
   		if (error || response.statusCode !== 200) {
