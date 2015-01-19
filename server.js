@@ -25,14 +25,18 @@ app.use(bodyParser());
 var router = express.Router();
 
 router.route('/foods').get(foodController.getFoods);
-router.route('/votes')
-	.get(voteController.getVotes)
+
+// //Only use for testing, don't give away IP addresses
+// router.route('/votes').get(voteController.getVotes)
+
 router.route('/vote/:food_id')
 	.get(voteController.getVoteCount)
 	.post(voteController.postVote);
 
 app.use('/api', router)
 
+// Initial scrape
 scraper.update()
+
 app.listen(port);
 console.log('DineExeter server running on port ' + port);
