@@ -4,24 +4,19 @@ var mongoose = require('mongoose'),
 
 	Food = mongoose.model('Food');
 
-exports.updateDB = function() {
+mongoose.connect('mongodb://localhost:27017/dineexeter');
+
+exports.update = function() {
 	parseHTML(function(foods){
-		for (food in foods) {
+		foods.forEach(function(food){
+			if (food == null) return;
 
-			var food = new Food(food);
+			delete food._id;
 
-			Food.find(food, function(oldfood){
-				oldfood.mealday = food.mealday
+			Food.update({ name: food.name, iselm: food.iselm}, food, { upsert: true}, function(err){
+				console.log(err)
 			})
-
-			food.save(function (err) {
-				if (err) {
-					console.log(err)
-				}
-
-				console.log('Food added to the database')
-			});
-    	}
+    	})
     })
 }
 
@@ -47,26 +42,24 @@ function parseMealData(body){
 
 	var d = new Date();
 	var temp = []
-	var foods = {};
+	var foods = [];
 
 	var currentDhall = 'Elm Street';
 
-	for (day in days) {
-		for (meal in meals) {
+	days.forEach(function(day){
+		meals.forEach(function(meal){
 			$('#lbl' + meal + day + ' p').each(function(){
 				var text = $(this).text().trim()
-				if(dhall.indexOf(text) < 2){
-					currentDhall = text;
-				} else if(dhall.indexOf(text) == 0){
-					currentDhall = 'Elm Street'
-				} else {
+				if(dhall.indexOf(text) == 0 || dhall.indexOf(text) == 1){
+					currentDhall = dhall[dhall.indexOf(text)]
+				} else if (text){
 					foods.push(
 						{ name: text, mealday: meal + day, iselm: dhall.indexOf(currentDhall) }
 					);
 				}
 			});
-		}
-	}
+		})
+	})
 	return foods;
 
 }
