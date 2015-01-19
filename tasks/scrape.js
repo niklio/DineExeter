@@ -14,7 +14,7 @@ exports.update = function() {
 			delete food._id;
 
 			Food.update({ name: food.name, iselm: food.iselm}, food, { upsert: true}, function(err){
-				console.log(err)
+				if (err) console.log(err)
 			})
     	})
     })

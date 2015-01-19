@@ -7,7 +7,5 @@ var VoteSchema = new mongoose.Schema({
 	upvote: Boolean
 });
 
-VoteSchema.index({ userID: 1, foodID: 1}, { unique: true });
-
 // Export the Mongoose model
 module.exports = mongoose.model('Vote', VoteSchema);

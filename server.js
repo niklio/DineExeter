@@ -15,9 +15,9 @@ var express = require('express'),
 
 	scraper = require('./tasks/scrape');
 
-// var scrape = schedule.scheduleJob('* * * * *', function(){
-// 	scraper.update()
-// });
+var scrape = schedule.scheduleJob('0 0 * * * ', function(){
+	scraper.update()
+});
 
 app.use(morgan('dev'));
 app.use(bodyParser());
@@ -25,7 +25,11 @@ app.use(bodyParser());
 var router = express.Router();
 
 router.route('/foods').get(foodController.getFoods);
-router.route('/vote/:food_id').put(voteController.postVote);
+router.route('/votes')
+	.get(voteController.getVotes)
+router.route('/vote/:food_id')
+	.get(voteController.getVoteCount)
+	.post(voteController.postVote);
 
 app.use('/api', router)
 
