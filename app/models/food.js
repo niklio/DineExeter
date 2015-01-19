@@ -5,7 +5,8 @@ var FoodSchema = new mongoose.Schema({
 	name: String,
 	mealday: String,
 	// 0 - weth, 1 - elm
-	iselm: Boolean
+	iselm: Boolean,
+	weekyear: Number
 });
 
 // Export the Mongoose model

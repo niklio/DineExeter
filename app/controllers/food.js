@@ -1,11 +1,16 @@
 var mongoose = require('mongoose'),
-	url = require('url')
+	url = require('url'),
+	tools = require('../../tools')
 
-var Food = mongoose.model('Food');
+	Food = mongoose.model('Food');
 
 exports.getFoods = function(req, res) {
 
-	Food.find(url.parse(req.url, true).query, function (err, food) {
+	var query = url.parse(req.url, true).query
+
+	query.weekyear = tools.getWeekYear(new Date())
+
+	Food.find(query, function (err, food) {
 		if (err) res.send(err);
 		res.json(food);
 	});

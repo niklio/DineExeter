@@ -2,6 +2,8 @@ var mongoose = require('mongoose'),
 	cheerio = require('cheerio'),
 	request = require('request'),
 
+	tools = require('../tools'),
+
 	Food = mongoose.model('Food');
 
 mongoose.connect('mongodb://localhost:27017/dineexeter');
@@ -12,6 +14,7 @@ exports.update = function() {
 			if (food == null) return;
 
 			delete food._id;
+			food.weekyear = tools.getWeekYear(new Date())
 
 			Food.update({ name: food.name, iselm: food.iselm}, food, { upsert: true}, function(err){
 				if (err) console.log(err)
