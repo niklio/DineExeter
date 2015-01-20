@@ -16,7 +16,7 @@ exports.update = function() {
 			delete food._id;
 			food.weekyear = tools.getWeekYear(new Date())
 
-			Food.update({ name: food.name, iselm: food.iselm}, food, { upsert: true}, function(err){
+			Food.update(food, food, { upsert: true}, function(err){
 				if (err) console.log(err)
 			})
     	})
