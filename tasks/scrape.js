@@ -10,7 +10,7 @@ mongoose.connect('mongodb://localhost:27017/dineexeter');
 
 exports.update = function() {
 	parseHTML(function(foods){
-		foods.forEach(function(food){
+		foods.forEach(function(food) {
 			if (food == null) return;
 
 			delete food._id;
@@ -49,13 +49,13 @@ function parseMealData(body){
 
 	var currentDhall = 'Elm Street';
 
-	days.forEach(function(day){
-		meals.forEach(function(meal){
-			$('#lbl' + meal + day + ' p').each(function(){
+	days.forEach(function(day) {
+		meals.forEach(function(meal) {
+			$('#lbl' + meal + day + ' p').each(function() {
 				var text = $(this).text().trim()
-				if(dhall.indexOf(text) == 0 || dhall.indexOf(text) == 1){
+				if(dhall.indexOf(text) == 0 || dhall.indexOf(text) == 1) {
 					currentDhall = dhall[dhall.indexOf(text)]
-				} else if (text){
+				} else if (text) {
 					foods.push(
 						{ name: text, mealday: meal + day, iselm: dhall.indexOf(currentDhall) }
 					);

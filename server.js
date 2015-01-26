@@ -17,7 +17,7 @@ var express = require('express'),
 
 	web_url = 'http://localhost:8000';
 
-var scrape = schedule.scheduleJob('0 0 * * * ', function(){
+var scrape = schedule.scheduleJob('0 0 * * * ', function () {
 	scraper.update()
 });
 
@@ -37,10 +37,10 @@ var router = express.Router();
 router.route('/foods').get(foodController.getFoods);
 
 //Only use for testing, don't give away IP addresses
-router.route('/votes').get(voteController.getVotes)
+router.route('/votes').get(voteController.getVotes);
 
 router.route('/vote/:food_id')
-	.get(voteController.getVoteCount)
+	.get(voteController.userHasVoted)
 	.post(voteController.postVote);
 
 app.use('/api', router)
