@@ -73,3 +73,4 @@ exports.userHasVoted = function(req, res) {
 		return;
 	})
 }
+
