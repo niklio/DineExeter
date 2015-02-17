@@ -14,15 +14,23 @@ exports.getFoods = function(req, res) {
 	query.weekyear = tools.getWeekYear(new Date())
 
 	Food.find(query, function (err, foods) {
+		votesCache = {};
+
 		async.each(foods, function (food, callback) {
 			if (err) res.send(err);
+
 			userHasVoted(userID, food._id, function (vote) {
-				food.vote = vote
+				votesCache[food._id] = vote;
 				callback()
 			});
+
+
 		},
 		function (err) {
-			console.log(foods)
+			for (var i = 0; i < foods.length; i++) {
+				foods[i] = foods[i].toJSON();
+				foods[i]["vote"] = votesCache[foods[i]._id];
+			}
 			res.json(foods);
 		});
 	});
@@ -34,7 +42,6 @@ function userHasVoted(userID, foodID, callback) {
 			return { message: 'Database error', error: err};
 		}
 
-		if (doc.upvote != null) callback(doc.upvote);
-		else callback(null);
+		return callback(doc[0])
 	})
 }
