@@ -15,7 +15,7 @@ var express = require('express'),
 
 	scraper = require('./tasks/scrape'),
 
-	web_url = 'http://localhost:8000';
+	web_url = 'http://dineexeter.herokuapp.com/';
 
 var scrape = schedule.scheduleJob('0 0 * * * ', function () {
 	scraper.update()

@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 
 	Food = mongoose.model('Food');
 
-mongoose.connect('mongodb://localhost:27017/dineexeter');
+mongoose.connect('mongodb://nliolios24:Flyingjunior14@candidate.33.mongolayer.com:10557,candidate.21.mongolayer.com:10610/app33336951');
 
 exports.update = function() {
 	parseHTML(function(foods){
