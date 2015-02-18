@@ -15,8 +15,7 @@ var express = require('express'),
 
 	scraper = require('./tasks/scrape'),
 
-	// web_url = 'http://dineexeter-23b.herokuapp.com/';
-	web_url = 'http://localhost:8888';
+	web_url = 'http://dineexeter-web.herokuapp.com';
 
 var scrape = schedule.scheduleJob('0 0 * * * ', function () {
 	scraper.update()
@@ -30,7 +29,6 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', web_url);
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Content-Type', 'application/javascript');
     next();
 });
 
